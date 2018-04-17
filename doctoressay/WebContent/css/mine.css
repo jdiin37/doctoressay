@@ -1,0 +1,16 @@
+.left{
+	width:250px;
+    float:left;
+    min-height:960px;
+    border-right:1px solid #ddd;
+    padding-right:5px;
+    margin-right:5px;
+}
+
+.float-right{
+    float:left;
+}
+
+.bg-gray{
+	background-color:gray !important;
+}
