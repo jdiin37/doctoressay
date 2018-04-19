@@ -9,39 +9,64 @@ class ViewList extends React.Component {
                   + '0' + ',"chartNo":' + '912473'
                   + ',"years":' + '5'
                   + ',"method":"getEmrViewListByYearsChartNo"}'
-          } 
+          },
+          listItems:null
         };
         
         this.handleClick = this.handleClick.bind(this);
-    }
+        
+    }      
     
     componentDidMount(){
-        console.log(this.state.postdata);
-    }
-    
-    
-    handleClick(event) {
+        //console.log(this.state.postdata);       
+        const self = this;
+        var request = $.when(ajax_Post(this.state.postdata)).done(function(data) {                                
+            if (data.status == "Success") {
+               self.setState({ listItems : data.resultSet }); 
+            } else {
+                ajaxErrMsg = data.errorMessage;
+            }   
+        });
+ 
+        request.onreadystatechange = null;
+        request.abort = null;
+        request = null;
         
+    }
+          
+    handleClick(event) {        
         event.preventDefault();
     }
 
        
     render() {
-       
+        let viewitem = <div>444</div>;
+        
+        if(this.state.listItems){
+            viewitem = (
+                <div>
+                    {this.state.listItems.map((item) =>
+                        <ViewItem desc={item.start_date}>
+                        </ViewItem>
+                    )}
+                </div>
+              );            
+        }
         if( !this.state.visible) {
             return null
-        }      
+        }           
+        
+        
         return (
                 <div className="row pre-scrollable">
                     <div className="col-sm-12">
-                        <div>
-                            <ViewItem desc="105/04/05 XXX brabrabra.."/>
-                        </div>
+                        {viewitem}
                     </div>
                 </div>
                          
         );
-      }   
+        
+    }
 }
 
 class ViewItem extends React.Component {
@@ -60,8 +85,7 @@ class ViewItem extends React.Component {
         event.preventDefault();
     }
       
-    render() {
-       
+    render() {      
         if( !this.state.visible) {
             return null
         }      
